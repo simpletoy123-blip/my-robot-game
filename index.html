@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Robot Battle 8-bit</title>
+<style>
+  body {
+    background: #111;
+    color: white;
+    text-align: center;
+    font-family: monospace;
+  }
+  canvas {
+    background: #222;
+    border: 4px solid white;
+    margin-top: 20px;
+  }
+  button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 18px;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>🤖 Robot Battle 8-bit</h1>
+
+<canvas id="game" width="400" height="200"></canvas>
+
+<br>
+<button onclick="attack()">ATTACK</button>
+<button onclick="hit()">HIT</button>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+let frame = 0;
+let mode = "idle";
+
+// โหลดรูป
+const images = {
+  idle: [
+    "hero_idle_1.png",
+    "hero_idle_2.png"
+  ],
+  attack: [
+    "hero_attack_1.png",
+    "hero_attack_2.png"
+  ],
+  hit: [
+    "hero_hit_1.png",
+    "hero_hit_2.png"
+  ]
+};
+
+let loadedImages = {};
+
+function loadImages() {
+  for (let state in images) {
+    loadedImages[state] = [];
+    images[state].forEach(src => {
+      const img = new Image();
+      img.src = src;
+      loadedImages[state].push(img);
+    });
+  }
+}
+
+loadImages();
+
+// animation loop
+function gameLoop() {
+  ctx.clearRect(0, 0, 400, 200);
+
+  let currentSet = loadedImages[mode];
+  let img = currentSet[Math.floor(frame / 10) % currentSet.length];
+
+  ctx.drawImage(img, 150, 80, 100, 100);
+
+  frame++;
+  requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+
+// ปุ่มควบคุม
+function attack() {
+  mode = "attack";
+  frame = 0;
+  setTimeout(() => mode = "idle", 400);
+}
+
+function hit() {
+  mode = "hit";
+  frame = 0;
+  setTimeout(() => mode = "idle", 400);
+}
+
+</script>
+
+</body>
+</html>
